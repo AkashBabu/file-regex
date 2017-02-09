@@ -1,0 +1,25 @@
+{
+  "name": "file-regex",
+  "version": "1.0.0",
+  "description": "Find files by using regex",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/AkashBabu/file-regex.git"
+  },
+  "keywords": [
+    "file",
+    "regex",
+    "find",
+    "pattern"
+  ],
+  "author": "Akash Babu",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/AkashBabu/file-regex/issues"
+  },
+  "homepage": "https://github.com/AkashBabu/file-regex#readme"
+}
