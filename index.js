@@ -24,7 +24,7 @@ function recursiveSearch(cwd, regex, depth) {
     }
 }
 
-function findFile(cwd, pattern, recursive, depth, cb) {
+function findFileByRegex(cwd, regex, recursive, depth, cb) {
 
     if (recursive.constructor == Function) {
         cb = recursive;
@@ -34,8 +34,6 @@ function findFile(cwd, pattern, recursive, depth, cb) {
         cb = depth;
         depth = 100;
     }
-
-    var regex = new RegExp('^' + pattern + "$");
 
     if (recursive) {
         cb(null, recursiveSearch(cwd, regex, depth));
@@ -50,5 +48,14 @@ function findFile(cwd, pattern, recursive, depth, cb) {
         })
     }
 }
+
+function findFile(cwd, pattern, recursive, depth, cb) {
+
+    var regex = new RegExp('^' + pattern + "$");
+
+    findFileByRegex(cwd, regex, recursive, depth, cb);
+}
+
+findFile.byRegex = findFileByRegex;
 
 module.exports = findFile;
