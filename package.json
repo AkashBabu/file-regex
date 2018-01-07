@@ -4,7 +4,10 @@
   "description": "Find files by using regex",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "fix": "./node_modules/.bin/standard --fix index.js",
+    "test": "./node_modules/.bin/standard index.js && ./node_modules/.bin/mocha test.js",
+    "test-watch": "./node_modules/.bin/mocha test.js -w",
+    "report": "./node_modules/.bin/nyc mocha --timeout=3000"
   },
   "repository": {
     "type": "git",
@@ -21,5 +24,17 @@
   "bugs": {
     "url": "https://github.com/AkashBabu/file-regex/issues"
   },
-  "homepage": "https://github.com/AkashBabu/file-regex#readme"
+  "homepage": "https://github.com/AkashBabu/file-regex#readme",
+  "devDependencies": {
+    "chai": "^4.1.2",
+    "eslint": "^4.14.0",
+    "eslint-config-google": "^0.9.1",
+    "mocha": "^4.1.0",
+    "nyc": "^11.4.1",
+    "rimraf": "^2.6.2",
+    "standard": "^10.0.3"
+  },
+  "dependencies": {
+    "async": "^2.6.0"
+  }
 }
