@@ -1,69 +1,110 @@
-# file-regex
+# file-regex [![Build Status](https://travis-ci.org/AkashBabu/file-regex.svg?branch=master)](https://travis-ci.org/AkashBabu/file-regex) [![npm version](https://badge.fury.io/js/file-regex.svg)](https://badge.fury.io/js/file-regex)
 
-### Installation
+* New in current version, you could either pass a string or an instance of RegExp for `pattern`
+
+## Installation
 
 > npm install file-regex -S
 
-### Usage
+## Usage
 
+Assume the below folder structure:
 ```
-var findFiles = require('file-regex')
-var pattern = 'in.*x.js'
-findFile(__dirname, 'in.*\.js', function(err, files) {
-  console.log(files);
-})
-Result:
-['index.js']
-
-OR
-
-findFiles(__dirname, 'in.*', true, 2, function(err, files) {
-  console.log('recursive file search with depth', files);
-})
-Result:
-recursive file search with depth [ { dir: 'C:\\Users\\abu8kor\\Documents\\Other Documents\\Nodejs\\lib\\file-regex\\.git',
-    file: 'index' },
-  { dir: 'C:\\Users\\abu8kor\\Documents\\Other Documents\\Nodejs\\lib\\file-regex',
-    file: 'index.js' },
-  { dir: 'C:\\Users\\abu8kor\\Documents\\Other Documents\\Nodejs\\lib\\file-regex\\test-folder',
-    file: 'index.js' },
-  { dir: 'C:\\Users\\abu8kor\\Documents\\Other Documents\\Nodejs\\lib\\file-regex\\test2',
-    file: 'index.js' },
-  { dir: 'C:\\Users\\abu8kor\\Documents\\Other Documents\\Nodejs\\lib\\file-regex\\test2',
-    file: 'indexx' } ]
-```
-
-`findFiles()` takes `pattern` as a string or RegEx and converts it into a RegEx with added ^ and $ boundary markers. If you want to provide
-an explicit RegEx object which is used without modification, you can use this variant:
-
-```
-var findFiles = require('file-regex').byRegex;
-
-findFile(__dirname, /^in.*\.js$/, function(err, files) {
-  console.log(files);
-})
-Result:
-['index.js']
+  - test1.txt
+  - test2.js
+  - test3.ts
+  + dir1
+    - test1.txt
+    - test2.js
+  + dir2
+    - test1.js
+    + dir3
+      + dir4
+        test1.txt
 
 ```
 
-### Constructor
 
-**findFiles(path, pattern [, recursive[, depth]], callback)**
-
-*path* - the path in which you want to perform file search
-*pattern* - regex pattern to search the files
-*recursive* - if true, then a recursive search is performed for the depth mentioned. *default* is false
-*depth* - the recursive depth upto which the file shall be searched.
-*callback(err, files)* - if recursive is false, then the files array will contain only the string of filenames, else it will contain an array of Objects which would provide information regarding the directory in which the matched file was found.
+```javascript
+  let findFiles = require('file-regex')
+  let pattern = 'test.*\.t.*' // Can also be /^test.*\.t.*/
 
 
+  findFile(__dirname, pattern, (err, files) => {  
+    console.log(files);
+  })
+  
+  ///=> Output
+  [{
+    dir: CURR_DIR,
+    file: "test1.txt"
+  }, {
+    dir: CURR_DIR,
+    file: "test1.ts"
+  }]
 
+  OR
 
-### Contribution
+  findFiles(__dirname, pattern, true, 2, function(err, files) {
+    console.log(files);
+  })
+  ///=> Output
+  [{
+    dir: 'CURR_DIR',
+    file: "test1.txt"
+  }, {
+    dir: 'CURR_DIR',
+    file: "test1.ts"
+  }, { 
+    dir: 'CURR_DIR/dir1',
+    file: 'test1.txt' 
+  }]
+
+```
+
+## Constructor
+
+### **findFiles(path, pattern ,recursive = false, depth = 1, callback)**
+
+**path** *string* - the path in which you want to perform file search  
+**pattern** *string|RegExp* - regex pattern to search the files  
+**recursive** *boolean* - if true, then a recursive search is performed for the depth mentioned. *default* is false  
+**depth** *number* - the recursive depth upto which the file shall be searched.  
+**callback(err, files)** *Function* - if recursive is false, then the files array will contain only the string of filenames, else it will contain an array of Objects which would provide information regarding the directory in which the matched file was found.
+
+## Contribution
 
 I know this is very small module, but any improvements or pull request are always welcome.
+Please make sure to follow JS-Standard-Code style  
 
-### License
+[![js-standard-style](https://cdn.rawgit.com/standard/standard/master/badge.svg)](http://standardjs.com)
+
+### Test
+> npm test  
+
+Testing in watch mode while development  
+> npm run test-watch  
+
+Report generation  
+> npm run report  
+
+## License
 
 MIT
+
+## Contributors
+
+<table>
+  <tbody align="center">
+    <tr align="center">
+      <td align="center">
+        <a href="https://github.com/navbruce">
+          <img width="150" height="150" src="https://github.com/navbruce.png?v=3&s=150">
+          </br>
+          Navbruce
+        </a>
+      </td>
+    </tr>
+  <tbody>
+</table>
+
