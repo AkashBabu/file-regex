@@ -30,7 +30,7 @@ Assume the below folder structure:
   let pattern = 'test.*\.t.*' // Can also be /^test.*\.t.*/
 
 
-  findFile(__dirname, pattern, (err, files) => {  
+  findFiles(__dirname, pattern, (err, files) => {  
     console.log(files);
   })
   
