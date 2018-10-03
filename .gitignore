@@ -2,3 +2,5 @@ node_modules/
 .nyc_output/
 .npmignore
 .vscode/
+dist/*
+test/files/*

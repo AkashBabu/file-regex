@@ -1,6 +1,9 @@
 # file-regex [![Build Status](https://travis-ci.org/AkashBabu/file-regex.svg?branch=master)](https://travis-ci.org/AkashBabu/file-regex) [![npm version](https://badge.fury.io/js/file-regex.svg)](https://badge.fury.io/js/file-regex)
 
-* New in current version, you could either pass a string or an instance of RegExp for `pattern`
+Blazing Fast matching file finder for the given regex pattern.  
+This library neither loads up the CPU nor does the job sequentially, instead under the hood, it uses [lib-promise-pool](https://github.com/AkashBabu/lib-promise-pool) with concurrency = 10(default). Hence 10 directories are searched concurrently.
+
+Please visit this [wiki](https://github.com/AkashBabu/file-regex/wiki/Docs-V2.x) for V2.x Docs
 
 ## Installation
 
@@ -10,101 +13,57 @@
 
 Assume the below folder structure:
 ```
-  - test1.txt
-  - test2.js
-  - test3.ts
+  - file1.js
+  - file2.js
+  - file3.ts
   + dir1
-    - test1.txt
-    - test2.js
+    - file4.ts
+    - file5.js
   + dir2
-    - test1.js
+    - file6.js
     + dir3
       + dir4
         test1.txt
 
 ```
-
-
+Example:
 ```javascript
-  let findFiles = require('file-regex')
-  let pattern = 'test.*\.t.*' // Can also be /^test.*\.t.*/
+import FindFiles from 'file-regex'
 
+const pattern = ;
 
-  findFiles(__dirname, pattern, (err, files) => {  
-    console.log(files);
-  })
-  
-  ///=> Output
-  [{
-    dir: CURR_DIR,
-    file: "test1.txt"
-  }, {
-    dir: CURR_DIR,
-    file: "test1.ts"
-  }]
+const result = await FindFiles(__dirname, /\.js$/);
 
-  OR
-
-  findFiles(__dirname, pattern, true, 2, function(err, files) {
-    console.log(files);
-  })
-  ///=> Output
-  [{
-    dir: 'CURR_DIR',
-    file: "test1.txt"
-  }, {
-    dir: 'CURR_DIR',
-    file: "test1.ts"
-  }, { 
-    dir: 'CURR_DIR/dir1',
-    file: 'test1.txt' 
-  }]
+console.log(result)
+// [{dir: __dirname, file: file1.js}, {dir: __dirname, file: file2.js}]
 
 ```
 
-## Constructor
+## Documentation
+**FindFiles(dir, pattern, depth = 0, options = {concurrency: 10})**
 
-### **findFiles(path, pattern ,recursive = false, depth = 1, callback)**
+| Param | Description |
+|:------|:------------|
+| `dir` | Base Directory where the search would begin |
+| `pattern` | Regex-Pattern for testing the matching files |
+| `depth` | Number of recursions into the directories upto which the file search shall proceed. *Defaults to 0* |
+| `options` | Options for controlling execution |
+| `options.concurrency` | Number of concurrent folder search. *Defaults to 10* |
 
-**path** *string* - the path in which you want to perform file search  
-**pattern** *string|RegExp* - regex pattern to search the files  
-**recursive** *boolean* - if true, then a recursive search is performed for the depth mentioned. *default* is false  
-**depth** *number* - the recursive depth upto which the file shall be searched.  
-**callback(err, files)** *Function* - if recursive is false, then the files array will contain only the string of filenames, else it will contain an array of Objects which would provide information regarding the directory in which the matched file was found.
+### Steps of execution
+1. Check if the given depth > -1
+2. Find all the files in the given directory and test against the given pattern
+3. if matched then push the data into the result array and decrement depth(--depth)
+4. Repeat steps 1, 2 & 3 untill depth > 0 and then return the results
+
 
 ## Contribution
 
 I know this is very small module, but any improvements or pull request are always welcome.
-Please make sure to follow JS-Standard-Code style  
-
-[![js-standard-style](https://cdn.rawgit.com/standard/standard/master/badge.svg)](http://standardjs.com)
 
 ### Test
-> npm test  
+> npm test 
 
-Testing in watch mode while development  
-> npm run test-watch  
-
-Report generation  
-> npm run report  
-
-## License
-
-MIT
-
-## Contributors
-
-<table>
-  <tbody align="center">
-    <tr align="center">
-      <td align="center">
-        <a href="https://github.com/navbruce">
-          <img width="150" height="150" src="https://github.com/navbruce.png?v=3&s=150">
-          </br>
-          Navbruce
-        </a>
-      </td>
-    </tr>
-  <tbody>
-</table>
+## Coverage Report  
+> npm run coverage
 
