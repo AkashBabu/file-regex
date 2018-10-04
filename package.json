@@ -35,6 +35,9 @@
         "coverage",
         "status"
     ],
+    "engines": {
+        "node": ">=8.0.0"
+    },
     "homepage": "https://github.com/AkashBabu/file-regex#readme",
     "devDependencies": {
         "babel-cli": "^6.26.0",
