@@ -2,8 +2,9 @@
     "name": "file-regex",
     "version": "3.0.2",
     "description": "Find files by using regex",
-    "main": "index.js",
+    "main": "dist/index.js",
     "scripts": {
+        "postinstall": "npm run build",
         "_test": "npm run build && mocha --require babel-core/register --require babel-polyfill test/**/*.test.js",
         "_test:exit": "npm run _test -- --exit",
         "test": "export NODE_ENV=test && npm run _test:exit",
