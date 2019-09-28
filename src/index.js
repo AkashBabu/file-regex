@@ -14,18 +14,16 @@ async function search(dir, regex, depth, result = [], concurrency) {
         if (!regex.global) {
             if (stat.isFile() && regex.test(file)) {
                 result.push({ dir, file });
-            } else if (stat.isDirectory() && depth > 0) {
-                await search(statPath, regex, depth - 1, result, concurrency);
             }
         } else { // scan the entire path for the regex if the pattern uses a //g
             if (regex.test(statPath)) {
                 result.push({ dir, file });
                 regex.lastIndex = 0; // reset the last index for global searches
             }
+        }
 
-            if (stat.isDirectory() && depth > 0) {
-                await search(statPath, regex, depth - 1, result, concurrency);
-            }
+        if (stat.isDirectory() && depth > 0) {
+            await search(statPath, regex, depth - 1, result, concurrency);
         }
     }
 
