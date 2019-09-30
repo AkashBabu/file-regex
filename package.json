@@ -4,7 +4,7 @@
     "description": "Find files by using regex",
     "main": "dist/index.js",
     "scripts": {
-        "_test": "npm run build && mocha --require babel-core/register --require babel-polyfill test/**/*.test.js",
+        "_test": "mocha --require babel-core/register --require babel-polyfill test/**/*.test.js",
         "_test:exit": "npm run _test -- --exit",
         "test": "export NODE_ENV=test && npm run _test:exit",
         "test:dev": "export NODE_ENV=test &&  npm run _test -- -w",
@@ -33,6 +33,7 @@
     "precommit": [
         "lint",
         "coverage",
+        "build",
         "status"
     ],
     "engines": {
