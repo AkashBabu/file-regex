@@ -15,11 +15,9 @@ async function search(dir, regex, depth, result = [], concurrency) {
             if (stat.isFile() && regex.test(file)) {
                 result.push({ dir, file });
             }
-        } else { // scan the entire path for the regex if the pattern uses a //g
-            if (regex.test(statPath)) {
-                result.push({ dir, file });
-                regex.lastIndex = 0; // reset the last index for global searches
-            }
+        } else if (regex.test(statPath)) { // scan the entire path for the regex if the pattern uses a //g
+            result.push({ dir, file });
+            regex.lastIndex = 0; // reset the last index for global searches
         }
 
         if (stat.isDirectory() && depth > 0) {
