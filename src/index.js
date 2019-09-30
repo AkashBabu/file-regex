@@ -8,21 +8,23 @@ const fs_stat = promisify(fs.stat);
 
 async function search(dir, regex, depth, result = [], concurrency) {
     async function fileAnalyzer(file) {
-        const statPath = path.join(dir, file);
-        const stat = await fs_stat(statPath);
+        const filePath = path.join(dir, file);
+        const stat = await fs_stat(filePath);
 
-        if (!regex.global) {
-            if (stat.isFile() && regex.test(file)) {
-                result.push({ dir, file });
-            }
-        } else if (regex.test(statPath)) { // scan the entire path for the regex if the pattern uses a //g
+        // Check if it's a file, if so then
+        // check if the pattern contains a global
+        // flag, if so then test the pattern
+        // on the complete path else just the filename
+        if (stat.isFile() && regex.test(regex.global ? filePath : file)) {
             result.push({ dir, file });
-            regex.lastIndex = 0; // reset the last index for global searches
+        } else if (stat.isDirectory() && depth > 0) {
+            await search(filePath, regex, depth - 1, result, concurrency);
         }
 
-        if (stat.isDirectory() && depth > 0) {
-            await search(statPath, regex, depth - 1, result, concurrency);
-        }
+        // reset the lastIndex for the regex
+        // to run the match from the beginning of the
+        // string (filePath)
+        regex.lastIndex = 0;
     }
 
     const folderContents = await fs_readDir(dir);
@@ -49,7 +51,7 @@ async function FindFiles(baseDir = path.resolve('../../'), pattern = '.*', depth
     const { concurrency = 10 } = options;
 
     const result = [];
-    depth > -1 && await search(baseDir, typeof pattern === 'string' ? new RegExp(pattern) : pattern, depth, result, concurrency);
+    depth > -1 && await search(path.resolve(baseDir), typeof pattern === 'string' ? new RegExp(pattern) : pattern, depth, result, concurrency);
     return result;
 }
 

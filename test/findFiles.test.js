@@ -41,7 +41,7 @@ describe('#functionality FindFiles', () => {
 
     it('should find all the files matching the given regex', async () => {
         const pattern = /\.js$/;
-        const result = await FindFiles(testFolder, pattern);
+        const result = await FindFiles(testFolder, pattern, 0);
         expect(result.length).to.be.eql(2);
 
         result.forEach(r => expect(r.dir).to.be.eql(testFolder));
@@ -53,6 +53,7 @@ describe('#functionality FindFiles', () => {
         const patternNoG = /\.js$/; // use later to avoid having to reset pattern.lastIndex in forEach
         const result = await FindFiles(testFolder, pattern);
         expect(result.length).to.be.eql(2);
+
 
         result.forEach(r => expect(r.dir).to.be.eql(testFolder));
         result.forEach(r => expect(patternNoG.test(r.file)).to.be.true);
@@ -95,5 +96,21 @@ describe('#functionality FindFiles', () => {
         const pattern = /\.js$/g;
         const result = await FindFiles(testFolder, pattern, -1);
         expect(result.length).to.be.eql(0);
+    });
+
+    it('should not match directories even if filename regex is not specified', async () => {
+        const pattern = /\/dir1/g;
+        const result = await FindFiles(testFolder, pattern, 5);
+        expect(result.length).to.be.eql(3);
+
+        result.forEach(r => expect(r.dir).to.be.eql(path.join(testFolder, 'dir1')));
+    });
+
+    it('should resolve relative paths', async () => {
+        const pattern = /\.js$/g;
+        const result = await FindFiles('test/files', pattern);
+        expect(result.length).to.be.eql(2);
+
+        result.forEach(r => expect(r.dir).to.be.eql(testFolder));
     });
 });
