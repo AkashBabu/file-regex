@@ -1,3 +1,6 @@
+# v3.1.0
+- Support for complete file-path match via global flag in regex
+
 # v3.0.0
 - Promise based instead of callbacks
 - Concurrent folder search
