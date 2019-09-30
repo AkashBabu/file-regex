@@ -1,7 +1,7 @@
 import fs from 'fs';
 import path from 'path';
 import { expect } from 'chai';
-import FindFiles from '../dist/index';
+import FindFiles from '../src';
 
 
 const testFolder = path.join(__dirname, 'files');
