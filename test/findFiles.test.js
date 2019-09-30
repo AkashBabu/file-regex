@@ -48,6 +48,22 @@ describe('#functionality FindFiles', () => {
         result.forEach(r => expect(pattern.test(r.file)).to.be.true);
     });
 
+    it('should find all the files with filepaths matching the given global regex', async () => {
+        const pattern = /\.js$/g;
+        const patternNoG = /\.js$/; // use later to avoid having to reset pattern.lastIndex in forEach
+        const result = await FindFiles(testFolder, pattern);
+        expect(result.length).to.be.eql(2);
+
+        result.forEach(r => expect(r.dir).to.be.eql(testFolder));
+        result.forEach(r => expect(patternNoG.test(r.file)).to.be.true);
+    });
+
+    it('should find every js/ts file with partial dirname in its path', async () => {
+        const pattern = /\/dir4\/.*\.[jt]s$/g;
+        const result = await FindFiles(testFolder, pattern, 32);
+        expect(result.length).to.be.eql(3); // 10 js files
+    });
+
     it('should find all the files matching the given pattern string', async () => {
         const pattern = '\.js$';
         const result = await FindFiles(testFolder, pattern);
@@ -63,8 +79,20 @@ describe('#functionality FindFiles', () => {
         expect(result.length).to.be.eql(4);
     });
 
+    it('should full-path search files only till the given depth', async () => {
+        const pattern = /\.ts$/;
+        const result = await FindFiles(testFolder, pattern, 2);
+        expect(result.length).to.be.eql(4);
+    });
+
     it('should not perform any search if the given depth = -1', async () => {
         const pattern = /\.js$/;
+        const result = await FindFiles(testFolder, pattern, -1);
+        expect(result.length).to.be.eql(0);
+    });
+
+    it('should not perform any full-path search if the given depth = -1', async () => {
+        const pattern = /\.js$/g;
         const result = await FindFiles(testFolder, pattern, -1);
         expect(result.length).to.be.eql(0);
     });
