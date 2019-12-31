@@ -1,4 +1,4 @@
-# file-regex [![Build Status](https://travis-ci.org/AkashBabu/file-regex.svg?branch=master)](https://travis-ci.org/AkashBabu/file-regex) [![npm version](https://badge.fury.io/js/file-regex.svg)](https://badge.fury.io/js/file-regex)
+# file-regex [![Build Status](https://travis-ci.org/AkashBabu/file-regex.svg?branch=master)](https://travis-ci.org/AkashBabu/file-regex) [![npm version](https://badge.fury.io/js/file-regex.svg)](https://badge.fury.io/js/file-regex) [![downloads](https://img.shields.io/npm/dm/file-regex)](https://img.shields.io/npm/dm/file-regex)
 
 Blazing Fast matching file finder for the given regex pattern.  
 This library neither loads up the CPU nor does the job sequentially, instead under the hood, it uses [lib-promise-pool](https://github.com/AkashBabu/lib-promise-pool) with concurrency = 10(default). Hence 10 directories are searched concurrently.
